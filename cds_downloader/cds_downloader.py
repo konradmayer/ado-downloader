@@ -27,6 +27,7 @@ import tempfile
 import datetime
 import logging
 import re
+import sys
 
 import operator
 from functools import reduce
@@ -406,13 +407,16 @@ class Downloader(object):
 
     def _retrieve_file(self, cds_product, cds_filter, file_name, dry_run=False):
         if not dry_run:
-            logging.info('Start download process ' + file_name)
-            self.cdsapi_client.retrieve(
-                cds_product,
-                cds_filter,
-                file_name
-            )
-            logging.info('Finish download process ' + file_name)
+            try:
+                logging.info('Start download process ' + file_name)
+                self.cdsapi_client.retrieve(
+                    cds_product,
+                    cds_filter,
+                    file_name
+                )
+                logging.info('Finish download process ' + file_name)
+            except:
+                sys.exit(1)
         else:
             logging.info('Dry run, therefore no download process started for file ' + file_name)
 
